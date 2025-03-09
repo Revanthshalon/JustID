@@ -1,0 +1,5 @@
+[workspace]
+members = [ "justid-dante", "justid-heimdall","justid-kraken", "justid-ragnar"]
+resolver = "3"
+
+[workspace.dependencies]
