@@ -3,4 +3,23 @@ name = "justid-heimdall"
 version = "0.1.0"
 edition = "2024"
 
+[lib]
+path = "src/lib.rs"
+
+[[bin]]
+name = "justid-heimdall"
+path = "src/main.rs"
+
 [dependencies]
+axum = { workspace = true }
+tokio = { workspace = true, default-features = false, features = ["macros", "rt-multi-thread"] }
+tower-http = { workspace = true, features = ["trace", "cors"] }
+serde = { workspace = true, features = ["derive"]}
+serde_json = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+sqlx = { workspace = true, default-features = false, features = ["derive", "runtime-tokio", "postgres", "sqlite", "uuid", "chrono"] }
+chrono = { workspace = true, features = ["serde"] }
+uuid = { workspace = true, features = ["serde", "v4"] }
+anyhow = { workspace = true }
+thiserror = { workspace = true }
