@@ -7,7 +7,7 @@ use serde_json::json;
 use thiserror::Error;
 
 #[derive(Error, Debug)]
-pub enum AppError {
+pub enum HeimdallError {
     #[error("Database error: {0}")]
     Database(#[from] sqlx::Error),
 
@@ -30,16 +30,16 @@ pub enum AppError {
     Unauthorized(String),
 }
 
-impl IntoResponse for AppError {
+impl IntoResponse for HeimdallError {
     fn into_response(self) -> Response {
         let (status, error_message) = match &self {
-            AppError::Database(e) => (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()),
-            AppError::NotFound(msg) => (StatusCode::NOT_FOUND, msg.clone()),
-            AppError::Validation(msg) => (StatusCode::BAD_REQUEST, msg.clone()),
-            AppError::Permission(msg) => (StatusCode::FORBIDDEN, msg.clone()),
-            AppError::Internal(msg) => (StatusCode::INTERNAL_SERVER_ERROR, msg.clone()),
-            AppError::Json(e) => (StatusCode::BAD_REQUEST, e.to_string()),
-            AppError::Unauthorized(msg) => (StatusCode::UNAUTHORIZED, msg.clone()),
+            HeimdallError::Database(e) => (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()),
+            HeimdallError::NotFound(msg) => (StatusCode::NOT_FOUND, msg.clone()),
+            HeimdallError::Validation(msg) => (StatusCode::BAD_REQUEST, msg.clone()),
+            HeimdallError::Permission(msg) => (StatusCode::FORBIDDEN, msg.clone()),
+            HeimdallError::Internal(msg) => (StatusCode::INTERNAL_SERVER_ERROR, msg.clone()),
+            HeimdallError::Json(e) => (StatusCode::BAD_REQUEST, e.to_string()),
+            HeimdallError::Unauthorized(msg) => (StatusCode::UNAUTHORIZED, msg.clone()),
         };
 
         // Log the error when it happens
@@ -57,4 +57,4 @@ impl IntoResponse for AppError {
     }
 }
 
-pub type Result<T> = std::result::Result<T, AppError>;
+pub type HeimdallResult<T> = Result<T, HeimdallError>;
